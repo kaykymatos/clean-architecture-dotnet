@@ -9,6 +9,6 @@ namespace CleanArchProject.Domain.Interfaces
         Task<Product> GetProductCategoryAsync(int? id);
         Task<Product> CreateAsync(Product category);
         Task<Product> UpdateAsync(Product category);
-        Task<Product> Remove(Product category);
+        Task<Product> RemoveAsync(Product category);
     }
 }
