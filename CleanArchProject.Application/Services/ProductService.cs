@@ -1,64 +1,75 @@
 ﻿using AutoMapper;
 using CleanArchProject.Application.DTOs;
 using CleanArchProject.Application.Interfaces;
-using CleanArchProject.Domain.Entities;
-using CleanArchProject.Domain.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using CleanArchProject.Application.Products.Commands;
+using CleanArchProject.Application.Products.Queries;
+using MediatR;
 
 namespace CleanArchProject.Application.Services
 {
-    public class ProductService: IProductService
+    public class ProductService : IProductService
     {
-        private IProductRepository _productRepository;
+        private readonly IMediator _productMediator;
 
         private readonly IMapper _mapper;
-        public ProductService(IMapper mapper, IProductRepository productRepository)
+        public ProductService(IMapper mapper, IMediator productMediator)
         {
-            _productRepository = productRepository ??
-                 throw new ArgumentNullException(nameof(productRepository));
+            _productMediator = productMediator ??
+                 throw new ArgumentNullException(nameof(productMediator));
 
             _mapper = mapper;
         }
 
         public async Task<IEnumerable<ProductDTO>> GetProducts()
         {
-            var productsEntity = await _productRepository.GetProductsAsync();
-            return _mapper.Map<IEnumerable<ProductDTO>>(productsEntity);
+            var productsQuery = new GetProductsQuery();
+            if (productsQuery == null)
+                throw new ApplicationException("Query is null!");
+
+            var result = await _productMediator.Send(productsQuery);
+            return _mapper.Map<IEnumerable<ProductDTO>>(result);
         }
 
         public async Task<ProductDTO> GetById(int? id)
         {
-            var productEntity = await _productRepository.GetByIdAsync(id);
-            return _mapper.Map<ProductDTO>(productEntity);
-        }
+            var productsQuery = new GetProductByIdQuery(id);
+            if (productsQuery == null)
+                throw new ApplicationException("Query is null!");
 
-        public async Task<ProductDTO> GetProductCategory(int? id)
-        {
-            var productEntity = await _productRepository.GetProductCategoryAsync(id);
-            return _mapper.Map<ProductDTO>(productEntity);
+            var result = await _productMediator.Send(productsQuery);
+            return _mapper.Map<ProductDTO>(result);
         }
 
         public async Task Add(ProductDTO productDto)
         {
-            var productEntity = _mapper.Map<Product>(productDto);
-            await _productRepository.CreateAsync(productEntity);
+            var retult = _mapper.Map<ProductCreateCommand>(productDto);
+            await _productMediator.Send(retult);
+
         }
 
         public async Task Update(ProductDTO productDto)
         {
-
-            var productEntity = _mapper.Map<Product>(productDto);
-            await _productRepository.UpdateAsync(productEntity);
+            var retult = _mapper.Map<ProductUpdateCommand>(productDto);
+            await _productMediator.Send(retult);
         }
 
         public async Task Remove(int? id)
         {
-            var productEntity = _productRepository.GetByIdAsync(id).Result;
-            await _productRepository.RemoveAsync(productEntity);
+            var result = new ProductRemoveCommand(id);
+            if (result == null)
+                throw new Exception("Product remove invalid!");
+            await _productMediator.Send(result);
+        }
+
+        public async Task<IEnumerable<ProductDTO>> GetByCategoryId(int? idCategory)
+        {
+            var productsQuery = new GetProductsQuery();
+            if (productsQuery == null)
+                throw new ApplicationException("Query is null!");
+
+            var result = await _productMediator.Send(productsQuery);
+            var products = _mapper.Map<IEnumerable<ProductDTO>>(result);
+            return products.Where(x => x.CategoryId == idCategory);
         }
     }
 }

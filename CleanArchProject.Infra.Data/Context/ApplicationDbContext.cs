@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using CleanArchProject.Domain.Entities;
+﻿using CleanArchProject.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace CleanArchProject.Infra.Data.Context

@@ -27,8 +27,11 @@ namespace CleanArchProject.Infra.IoC
 
             services.AddAutoMapper(typeof(DomainToDTOMappingProfile));
 
+            var myHandlers = AppDomain.CurrentDomain.Load("CleanArchProject.Application");
+            services.AddMediatR(
+                x => x.RegisterServicesFromAssembly(typeof(DomainToDTOMappingProfile).Assembly));
             return services;
         }
-        
+
     }
 }

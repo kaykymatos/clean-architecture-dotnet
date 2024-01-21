@@ -1,4 +1,3 @@
-using Microsoft.Data.SqlClient;
 using CleanArchProject.Infra.IoC;
 
 var builder = WebApplication.CreateBuilder(args);

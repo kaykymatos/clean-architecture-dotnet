@@ -8,7 +8,7 @@ namespace CleanArchProject.WebUI.Controllers
         private readonly IProductService _productService;
         public ProductsController(IProductService productService)
         {
-                _productService = productService;
+            _productService = productService;
         }
         public async Task<IActionResult> Index()
         {

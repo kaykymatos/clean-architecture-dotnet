@@ -1,9 +1,4 @@
 ﻿using CleanArchProject.Application.DTOs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CleanArchProject.Application.Interfaces
 {
@@ -11,8 +6,7 @@ namespace CleanArchProject.Application.Interfaces
     {
         Task<IEnumerable<ProductDTO>> GetProducts();
         Task<ProductDTO> GetById(int? id);
-
-        Task<ProductDTO> GetProductCategory(int? id);
+        Task<IEnumerable<ProductDTO>> GetByCategoryId(int? idCategory);
         Task Add(ProductDTO productDto);
         Task Update(ProductDTO productDto);
         Task Remove(int? id);

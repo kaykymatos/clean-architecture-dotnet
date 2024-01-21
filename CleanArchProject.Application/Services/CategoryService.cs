@@ -1,54 +1,55 @@
 ﻿using AutoMapper;
+using CleanArchProject.Application.Categories.Commands;
+using CleanArchProject.Application.Categories.Queries;
 using CleanArchProject.Application.DTOs;
 using CleanArchProject.Application.Interfaces;
-using CleanArchProject.Domain.Entities;
-using CleanArchProject.Domain.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using MediatR;
 
 namespace CleanArchProject.Application.Services
 {
-    public class CategoryService: ICategoryService
+    public class CategoryService : ICategoryService
     {
-        private ICategoryRepository _categoryRepository;
+        private readonly IMediator _productMediator;
         private readonly IMapper _mapper;
-        public CategoryService(ICategoryRepository categoryRepository, IMapper mapper)
+        public CategoryService(IMediator productMediator, IMapper mapper)
         {
-            _categoryRepository = categoryRepository;
+            _productMediator = productMediator;
             _mapper = mapper;
         }
 
         public async Task<IEnumerable<CategoryDTO>> GetCategories()
         {
-            var categoriesEntity = await _categoryRepository.GetCategoriesAsync();
-            return _mapper.Map<IEnumerable<CategoryDTO>>(categoriesEntity);
+            var categoryQuery = new GetCategoriesQuery();
+            var categories = await _productMediator.Send(categoryQuery);
+            return _mapper.Map<IEnumerable<CategoryDTO>>(categories);
         }
 
         public async Task<CategoryDTO> GetById(int? id)
         {
-            var categoryEntity = await _categoryRepository.GetByIdAsync(id);
-            return _mapper.Map<CategoryDTO>(categoryEntity);
+            var categoryQuery = new GetCategoryByIdQuery(id);
+            var categoriy = await _productMediator.Send(categoryQuery);
+            return _mapper.Map<CategoryDTO>(categoriy);
         }
 
         public async Task Add(CategoryDTO categoryDto)
         {
-            var categoryEntity = _mapper.Map<Category>(categoryDto);
-            await _categoryRepository.CreateAsync(categoryEntity);
+            var categoryQuery = _mapper.Map<CategoryCreateCommand>(categoryDto);
+            await _productMediator.Send(categoryQuery);
         }
 
         public async Task Update(CategoryDTO categoryDto)
         {
-            var categoryEntity = _mapper.Map<Category>(categoryDto);
-            await _categoryRepository.UpdateAsync(categoryEntity);
+
+            var categoryQuery = _mapper.Map<CategoryUpdateCommand>(categoryDto);
+            await _productMediator.Send(categoryQuery);
         }
 
         public async Task Remove(int? id)
         {
-            var categoryEntity = _categoryRepository.GetByIdAsync(id).Result;
-            await _categoryRepository.RemoveAsync(categoryEntity);
+            var result = new CategoryRemoveCommand(id);
+            if (result == null)
+                throw new Exception("Product remove invalid!");
+            await _productMediator.Send(result);
         }
     }
 }
