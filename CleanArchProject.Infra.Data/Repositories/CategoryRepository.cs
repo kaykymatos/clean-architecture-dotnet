@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace CleanArchProject.Infra.Data.Repositories
 {
-    public class CategoryRepository : ICategoryReository
+    public class CategoryRepository : ICategoryRepository
     {
         private readonly ApplicationDbContext _context;
         public CategoryRepository(ApplicationDbContext context)
@@ -29,7 +29,7 @@ namespace CleanArchProject.Infra.Data.Repositories
             return await _context.Categories.ToListAsync();
         }
 
-        public async Task<Category> GetCategoryAsync(int? id)
+        public async Task<Category> GetByIdAsync(int? id)
         {
             return await _context.Categories.FindAsync(id);
         }

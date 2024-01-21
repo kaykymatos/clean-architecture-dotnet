@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace CleanArchProject.Infra.Data.Repositories
 {
-    public class ProductRepository : IProductReository
+    public class ProductRepository : IProductRepository
     {
         private readonly ApplicationDbContext _context;
         public ProductRepository(ApplicationDbContext context)
@@ -29,7 +29,7 @@ namespace CleanArchProject.Infra.Data.Repositories
             return await _context.Products.ToListAsync();
         }
 
-        public async Task<Product> GetProductAsync(int? id)
+        public async Task<Product> GetByIdAsync(int? id)
         {
             return await _context.Products.FindAsync(id);
         }

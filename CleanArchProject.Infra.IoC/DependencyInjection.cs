@@ -1,4 +1,7 @@
-﻿using CleanArchProject.Domain.Interfaces;
+﻿using CleanArchProject.Application.Interfaces;
+using CleanArchProject.Application.Mappings;
+using CleanArchProject.Application.Services;
+using CleanArchProject.Domain.Interfaces;
 using CleanArchProject.Infra.Data.Context;
 using CleanArchProject.Infra.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -16,9 +19,16 @@ namespace CleanArchProject.Infra.IoC
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
             x => x.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
 
-            services.AddScoped<ICategoryReository, CategoryRepository>();
-            services.AddScoped<IProductReository, ProductRepository>();
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<IProductRepository, ProductRepository>();
+
+            services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<ICategoryService, CategoryService>();
+
+            services.AddAutoMapper(typeof(DomainToDTOMappingProfile));
+
             return services;
         }
+        
     }
 }
