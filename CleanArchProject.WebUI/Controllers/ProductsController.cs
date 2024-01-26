@@ -1,10 +1,12 @@
 ﻿using CleanArchProject.Application.DTOs;
 using CleanArchProject.Application.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace CleanArchProject.WebUI.Controllers
 {
+    [Authorize]
     public class ProductsController : Controller
     {
         private readonly IProductService _productService;
@@ -74,6 +76,7 @@ namespace CleanArchProject.WebUI.Controllers
         }
 
         [HttpGet()]
+        [Authorize(Roles ="Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
