@@ -1,11 +1,14 @@
 ﻿using CleanArchProject.Application.DTOs;
 using CleanArchProject.Application.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CleanArchProject.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class CategoriesController : ControllerBase
     {
         private readonly ICategoryService _categoryService;
@@ -57,6 +60,7 @@ namespace CleanArchProject.Api.Controllers
 
         }
         [HttpDelete("{id:int}")]
+        [Authorize]
         public async Task<IActionResult> DeleteProduct(int? id)
         {
             var result = await _categoryService.GetById(id);

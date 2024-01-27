@@ -8,7 +8,6 @@ builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddControllersWithViews();
 var app = builder.Build();
 
-ISeedUserRoleInitial seedUserRolesInitial = app.Services.CreateScope().ServiceProvider.GetService<ISeedUserRoleInitial>();
 // Configure the HTTP request pipeline.
 
 if (!app.Environment.IsDevelopment())
@@ -17,6 +16,8 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+ISeedUserRoleInitial seedUserRolesInitial = app.Services.CreateScope().ServiceProvider.GetService<ISeedUserRoleInitial>();
+
 seedUserRolesInitial.SeedRoles();
 seedUserRolesInitial.SeedUsers();
 

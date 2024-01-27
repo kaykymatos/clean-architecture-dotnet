@@ -27,14 +27,21 @@ namespace CleanArchProject.Infra.Data.Identity
 
         public async Task<bool> RegisterUser(string email, string passowrd)
         {
-            var applicationUser = new ApplicationUser
-            {
-                UserName = email,
-                Email = email
-            };
-            var result = await _userManager.CreateAsync(applicationUser);
+            ApplicationUser user = new ApplicationUser();
+            user.UserName = email;
+            user.Email = email;
+            user.NormalizedUserName = email.ToUpper();
+            user.NormalizedEmail = email.ToUpper();
+            user.EmailConfirmed = true;
+            user.LockoutEnabled = false;
+            user.SecurityStamp = Guid.NewGuid().ToString();
+
+            var result = _userManager.CreateAsync(user, passowrd).Result;
             if (result.Succeeded)
-                await _signInManager.SignInAsync(applicationUser, isPersistent: false);
+                await _userManager.AddToRoleAsync(user, "User");
+
+            if (result.Succeeded)
+                await _signInManager.SignInAsync(user, isPersistent: false);
 
             return result.Succeeded;
         }
