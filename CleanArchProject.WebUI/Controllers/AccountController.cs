@@ -1,5 +1,4 @@
 ﻿using CleanArchProject.Domain.Account;
-using CleanArchProject.Infra.Data.Identity;
 using CleanArchProject.WebUI.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,7 +9,7 @@ namespace CleanArchProject.WebUI.Controllers
         private readonly IAuthenticate _authenticate;
         public AccountController(IAuthenticate authenticate)
         {
-                _authenticate=authenticate;
+            _authenticate = authenticate;
         }
         [HttpGet]
         public IActionResult Register()
@@ -35,12 +34,12 @@ namespace CleanArchProject.WebUI.Controllers
             return View(new LoginViewModel
             {
                 ReturnUrl = returnUrl
-            }) ;
+            });
         }
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
-            var result =await  _authenticate.Authenticate(model.Email, model.Password);
+            var result = await _authenticate.Authenticate(model.Email, model.Password);
             if (result)
             {
                 if (string.IsNullOrEmpty(model.ReturnUrl))

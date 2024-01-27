@@ -1,11 +1,5 @@
 ﻿using CleanArchProject.Domain.Account;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CleanArchProject.Infra.Data.Identity
 {
@@ -41,7 +35,7 @@ namespace CleanArchProject.Infra.Data.Identity
             var result = await _userManager.CreateAsync(applicationUser);
             if (result.Succeeded)
                 await _signInManager.SignInAsync(applicationUser, isPersistent: false);
-            
+
             return result.Succeeded;
         }
     }

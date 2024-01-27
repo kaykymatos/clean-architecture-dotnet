@@ -1,10 +1,5 @@
 ﻿using CleanArchProject.Domain.Account;
 using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CleanArchProject.Infra.Data.Identity
 {
@@ -20,7 +15,7 @@ namespace CleanArchProject.Infra.Data.Identity
         }
         public void SeedRoles()
         {
-            if(_userManager.FindByEmailAsync("usuario@localhost").Result == null)
+            if (_userManager.FindByEmailAsync("usuario@localhost").Result == null)
             {
                 ApplicationUser user = new ApplicationUser();
                 user.UserName = "usuario@localhost";

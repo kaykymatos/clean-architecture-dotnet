@@ -76,7 +76,7 @@ namespace CleanArchProject.WebUI.Controllers
         }
 
         [HttpGet()]
-        [Authorize(Roles ="Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
